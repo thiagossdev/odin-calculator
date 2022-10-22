@@ -22,6 +22,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "prettier.enable": true,
   "prettier.singleQuote": true,
+  "prettier.printWidth": 120,
   "prettier.tabWidth": 2,
   "prettier.semi": true,
 
