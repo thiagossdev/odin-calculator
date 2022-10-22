@@ -1,0 +1,58 @@
+:root {
+  --clctr-black: #000;
+  --clctr-white: #f9faf8;
+  --clctr-blue: #0a58ca;
+}
+
+body {
+  font-family: Inter, sans-serif;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+}
+
+a {
+  text-decoration: none;
+}
+
+.bg-white {
+  background-color: var(--clctr-white);
+}
+
+.text-white {
+  color: var(--clctr-white);
+}
+
+a.text-white {
+  color: var(--clctr-white);
+}
+
+a.text-white:hover {
+  color: var(--clctr-white);
+  opacity: 0.65;
+}
+
+.bg-blue {
+  background-color: var(--clctr-blue);
+}
+
+.text-blue {
+  color: var(--clctr-blue);
+}
+
+a.text-blue {
+  color: var(--clctr-blue);
+}
+
+a.text-blue:hover {
+  color: var(--clctr-blue);
+  opacity: 0.65;
+}
+
+.align-center {
+  text-align: center;
+}
