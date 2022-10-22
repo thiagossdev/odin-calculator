@@ -2,6 +2,9 @@
   --clctr-black: #000;
   --clctr-white: #f9faf8;
   --clctr-blue: #0a58ca;
+  --clctr-green: #0f5132;
+  --clctr-red: #b02a37;
+  --clctr-orange: #fd7e14;
 }
 
 body {
@@ -50,6 +53,57 @@ a.text-blue {
 
 a.text-blue:hover {
   color: var(--clctr-blue);
+  opacity: 0.65;
+}
+
+.bg-green {
+  background-color: var(--clctr-green);
+}
+
+.text-green {
+  color: var(--clctr-green);
+}
+
+a.text-green {
+  color: var(--clctr-green);
+}
+
+a.text-green:hover {
+  color: var(--clctr-green);
+  opacity: 0.65;
+}
+
+.bg-red {
+  background-color: var(--clctr-red);
+}
+
+.text-red {
+  color: var(--clctr-red);
+}
+
+a.text-red {
+  color: var(--clctr-red);
+}
+
+a.text-red:hover {
+  color: var(--clctr-red);
+  opacity: 0.65;
+}
+
+.bg-orange {
+  background-color: var(--clctr-orange);
+}
+
+.text-orange {
+  color: var(--clctr-orange);
+}
+
+a.text-orange {
+  color: var(--clctr-orange);
+}
+
+a.text-orange:hover {
+  color: var(--clctr-orange);
   opacity: 0.65;
 }
 
