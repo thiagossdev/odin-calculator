@@ -12,6 +12,7 @@
     currentDisplay = '0';
     history = [];
     accumulator = NaN;
+    accumulate = false;
     currentNumber = NaN;
     currentOperation = '';
     lastInput = '';
@@ -37,6 +38,7 @@
       this.currentDisplay = '0';
       this.history = [];
       this.accumulator = NaN;
+      this.accumulate = false;
       this.currentNumber = NaN;
       this.currentOperation = '';
       this.lastInput = '';
@@ -53,7 +55,13 @@
       return input.search(/^\d$/) !== -1;
     }
 
+    toString() {
+      return `ACC:${this.accumulator} OP[${this.currentOperation}] ${this.currentNumber}:${this.currentDisplay} (${this.lastInput})
+  [${this.history}]`;
+    }
+
     processNumber(text) {
+      console.log('S:' + this.toString());
       const number = this.parseNumber(text).toString();
       this.processInput(number);
 
@@ -67,20 +75,7 @@
     }
 
     processOperator(operator) {
-      if (this.history[this.history.length - 1] === '=') {
-        this.history = [];
-        if (this.currentOperation !== '') {
-          const temp = this.currentNumber;
-          this.currentNumber = this.accumulator;
-          this.accumulator = temp;
-          this.lastInput = this.currentOperation;
-        } else {
-          this.currentNumber = this.accumulator;
-          this.accumulator = NaN;
-          this.lastInput = '1';
-        }
-      }
-
+      console.log('S:' + this.toString());
       switch (operator) {
         case 'Clear':
           this.reset();
@@ -93,7 +88,9 @@
           this.processOperation(operator);
       }
 
-      this.lastInput = operator;
+      if (operator !== '=') {
+        this.lastInput = operator;
+      }
       this.update();
     }
 
@@ -113,14 +110,28 @@
     }
 
     processOperation(operator) {
-      console.log(this.currentOperation, this.accumulator, this.lastInput, operator);
+      if (this.history[this.history.length - 1] === '=') {
+        if (this.currentOperation !== '') {
+          console.log('SWAP ACC');
+          this.currentDisplay = this.accumulator.toString();
+          this.history = [this.currentNumber, this.currentOperation];
+        } else {
+          this.history = [];
+          console.log('ZERO ACC');
+          this.currentNumber = this.accumulator;
+          this.accumulator = NaN;
+        }
+      }
+
+      if (operator !== '=') {
+        this.accumulate = false;
+      }
+
       if (this.lastInput !== operator) {
         if (!isNaN(this.accumulator) && this.currentOperation !== '' && this.isNumber(this.lastInput)) {
           this.makeOperation(this.currentOperation);
           this.putOperator(operator);
-          if (operator === '=') {
-            this.currentOperation = '';
-          }
+          console.log('A');
         } else if (!isNaN(this.accumulator) && this.currentOperation !== '' && operator === '=') {
           const currentNumber = this.currentNumber;
           const currentOperation = this.currentOperation;
@@ -130,14 +141,13 @@
           this.accumulator = currentNumber;
           this.currentOperation = currentOperation;
           this.clear = false;
-          console.log(this.currentOperation, this.accumulator, this.lastInput, operator);
           console.log('D');
         } else if (this.isOperator(this.lastInput, true)) {
           this.putOperator(operator);
           console.log('B');
         } else {
           this.makeOperation(operator);
-          console.log('C' + operator);
+          console.log('C');
         }
         this.backspaceEnable = false;
       }
@@ -148,14 +158,17 @@
       this.pushHistory(operator);
 
       if (!isNaN(this.accumulator)) {
-        this.accumulator = this.operate(operator, this.accumulator, this.currentNumber);
-        this.currentOperation = '';
-        this.currentDisplay = this.accumulator.toString();
+        const tempNumber = this.currentNumber;
+        this.currentNumber = this.operate(operator, this.accumulator, this.currentNumber);
+        this.currentDisplay = this.currentNumber.toString();
+        if (!this.accumulate) {
+          this.accumulator = operator === '=' ? tempNumber : this.currentNumber;
+          this.accumulate = true;
+        }
       } else {
         this.currentOperation = operator;
         this.accumulator = this.currentNumber;
       }
-      console.log('ACC: ' + this.accumulator);
 
       this.clear = true;
     }
@@ -164,13 +177,18 @@
       if (this.backspaceEnable) {
         this.currentDisplay = this.currentDisplay.length > 1 ? this.currentDisplay.slice(0, -1) : '0';
         this.currentNumber = this.parseNumber(this.currentDisplay);
-        this.update();
+      } else {
+        this.history = [];
+        this.accumulator = NaN;
       }
+      this.update();
     }
 
     putOperator(operator) {
       console.log('put');
-      this.currentOperation = operator;
+      if (operator !== '=') {
+        this.currentOperation = operator;
+      }
       this.history[this.history.length - 1] = operator;
     }
 
@@ -201,6 +219,7 @@
     }
 
     update() {
+      console.log('E:' + this.toString());
       this.updatePrimary();
       this.updateSecondary();
     }
